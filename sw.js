@@ -1,5 +1,5 @@
 const VERSION = 'v2';
-const SHELL = 'zamzam-shell-v39';
+const SHELL = 'zamzam-shell-v40';
 // Content data files update independently: network-first so users get new content
 // as soon as it is published, with cache fallback when offline.
 const CONTENT_FILES = ['content.js', 'stories-data.js', 'stories-data.js', 'quran-full.json', 'tafsir-1-14.json', 'tafsir-15-39.json', 'tafsir-40-94.json', 'tafsir-95-114.json'];
