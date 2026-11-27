@@ -5,7 +5,7 @@
 // ============================================================
 
 const PUSH_SERVER = "https://zamzam-push.zamzam-push.workers.dev";
-const APP_VERSION = "v39"; // bump with each release
+const APP_VERSION = "v40"; // bump with each release
 
 // ---------- device identity ----------
 function getDeviceId() {
