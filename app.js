@@ -1059,7 +1059,8 @@ function renderAbout(){
      <div class="card"><h3>تحميل التطبيق</h3><div class="muted" style="line-height:1.9">
      من كروم أو إيدج على اللابتوب: أيقونة التثبيت في شريط العنوان (اختياري — الإشعارات بتشتغل من غيره).<br>
      من كروم على أندرويد: قائمة ⋮ ثم "تثبيت التطبيق" أو "Add to Home screen".<br>
-     من سفاري على آيفون: زرار المشاركة ثم "Add to Home Screen".</div></div>` +
+     من سفاري على آيفون: زرار المشاركة ثم "Add to Home Screen".</div>
+     <div class="audio-row" style="margin-top:8px"><button class="btn teal" id="install-app-btn">تثبيت التطبيق</button></div></div>` +
      renderSettingsCard() +
      `<div class="credit">تطبيق زمزم من تصميم وتنفيذ مريم عبدالرحمن، نسأل الله أن ينفع به</div>`);
   const nb = document.getElementById('notif-enable');
@@ -1088,6 +1089,21 @@ function renderAbout(){
     }
   };
   wirePrayerPrefs();
+  const ib = document.getElementById('install-app-btn');
+  if(ib) ib.onclick = async ()=>{
+    if(window.__zamzamInstallPrompt){
+      ib.disabled = true;
+      try{
+        window.__zamzamInstallPrompt.prompt();
+        const ch = await window.__zamzamInstallPrompt.userChoice;
+        toast(ch && ch.outcome==='accepted' ? 'التثبيت بدأ ✓' : 'ماشي — الخطوات فوق لو حبيتي تثبتي بعدين');
+        window.__zamzamInstallPrompt = null;
+      }catch(e){ toast('من قائمة ⋮ في كروم اختاري "تثبيت التطبيق"'); }
+      ib.disabled = false;
+    } else {
+      toast('من قائمة ⋮ في كروم على أندرويد اختاري "تثبيت التطبيق" أو "Add to Home screen"');
+    }
+  };
   const ns2 = document.getElementById('name-save-settings');
   if(ns2) ns2.onclick = ()=>{
     const v = document.getElementById('settings-name').value.trim();
@@ -1233,6 +1249,9 @@ window.addEventListener('hashchange', route);
    Publish flow: any change to content.js/quran-full.json reaches users on their next
    online visit (network-first). Any code change ships by bumping files + the VERSION
    constant in sw.js; the app detects the new service worker and reloads itself. */
+window.__zamzamInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); window.__zamzamInstallPrompt = e; });
+window.addEventListener('appinstalled', ()=>{ window.__zamzamInstallPrompt = null; });
 if(window.ZamzamPush && ZamzamPush.registerDevice){
   ZamzamPush.registerDevice().then(r=>{ if(r && r.blocked) store.set('push-blocked', true); }).catch(()=>{});
 }
